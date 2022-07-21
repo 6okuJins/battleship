@@ -5,8 +5,12 @@ const Gameboard = () => {
       board[coordinates[i]] = ship;
     }
   }
+  const getBoard = () => {
+    return board;
+  }
   return {
-    placeShip
+    placeShip,
+    getBoard
   }
 }
 export default Gameboard;
