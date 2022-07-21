@@ -7,7 +7,7 @@ describe('Ship methods', () => {
   // let Submarine;
   // let Destroyer;
   beforeEach(() => {
-    Carrier = new Ship(5);
+    Carrier = Ship(5);
   });
   test('if it accepts a hit', () => {
     Carrier.hit(0);
