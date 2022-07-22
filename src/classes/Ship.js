@@ -9,7 +9,7 @@ const Ship = (length) => {
     return (hitPositions.length == shipLength);
   }
   const getHitPositions = () => {
-    return hitPositions;
+    return hitPositions.slice();
   }
 
   return {
