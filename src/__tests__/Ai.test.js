@@ -29,3 +29,13 @@ describe('getMove()', () => {
     expect(ai.getMoves().length <= 100).toBeTruthy();
   })
 });
+
+describe('getPositions()', () => {
+  beforeEach(() => {
+    ai = Ai();
+  });
+  test('if it returns a valid set of positions', () => {
+    const posSet = new Set(ai.getPositions().flat());
+    expect(posSet.size).toEqual(17);
+  });
+})
