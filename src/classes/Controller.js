@@ -12,23 +12,25 @@ const Controller = (positions) => {
   let currentOpponent = ai;
 
   for (const position of positions) {
-    console.log(position);
+    player.gameboard.placeShip(Ship(position.length), position);
   }
   // mock setup
-  
-  ai.gameboard.placeShip(Ship(5), [0,1,2,3,4]);
-  ai.gameboard.placeShip(Ship(4), [5,6,7,8]);
-  ai.gameboard.placeShip(Ship(3), [9,10,11]);
-  ai.gameboard.placeShip(Ship(3), [12,13,14]);
-  ai.gameboard.placeShip(Ship(2), [15, 16]);
+  for (const position of ai.getPositions()) {
+    ai.gameboard.placeShip(Ship(position.length), position);
+  }
 
+  console.table(ai.getPositions());
   // game loop
   while (!(player.gameboard.gameOver() || ai.gameboard.gameOver())) {
     let move;
+
     if (currentPlayer == player) {
-      //move = prompt('Make your move');
+      move = prompt('Make your move');
       //move = 1;
       player.setVisited(move);
+      if (move === 'break') {
+        break;
+      }
     } else {
       move = ai.getMove();
     }
