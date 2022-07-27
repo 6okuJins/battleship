@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "private": true,
+  "homepage": "https://6okujins.github.io/battleship/",
   "scripts": {
     "test": "jest",
     "build": "webpack"
