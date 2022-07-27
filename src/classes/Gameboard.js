@@ -27,10 +27,12 @@ const Gameboard = () => {
         if (ship.isSunk()) {
           sunkenShips ++;
         }
+        return true;
       }
     }
     else {
-      board[coordinates] = ship;
+      board[coordinates] = null;
+      return false;
     }
   }
   const gameOver = () => {
