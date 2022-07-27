@@ -80,9 +80,11 @@ const Main = () => {
   
   const aiGrid = document.createElement('div');
   aiGrid.id = 'aiGrid';
+  aiGrid.classList.add('invisible');
   opponentContainer.append(aiGrid);
   for (let i = 0; i < 100; i++) {
     const tile = document.createElement('div');
+    tile.dataset.index = i;
     aiGrid.append(tile);
   }
   return {
