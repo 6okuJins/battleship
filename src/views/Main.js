@@ -6,6 +6,10 @@ const Main = () => {
   let currentShip = ships.pop();
   const dom = document.querySelector('body');
   const main = document.createElement('div');
+  const announce = document.createElement('div');
+  announce.classList.add('announce');
+  main.append(announce);
+  announce.textContent = 'Place your ships!'
   const playerContainer = document.createElement('div');
   playerContainer.classList.add('playerContainer');
   const opponentContainer = document.createElement('div');
@@ -17,7 +21,7 @@ const Main = () => {
   //axis button
   let axis = 'x';
   const axisBtn = document.createElement('button');
-  axisBtn.textContent = axis;
+  axisBtn.textContent = `Axis: ${axis}`;
   playerContainer.append(axisBtn);
   axisBtn.addEventListener('click', () => {
     if (axis === 'x') {
@@ -25,7 +29,7 @@ const Main = () => {
     } else {
       axis = 'x';
     }
-    axisBtn.textContent = axis;
+    axisBtn.textContent = `Axis: ${axis}`;
   })
   // submit button
   const submitBtn = document.createElement('button');
