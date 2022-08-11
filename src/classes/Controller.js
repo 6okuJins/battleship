@@ -20,31 +20,17 @@ const Controller = (positions) => {
   }
 
   console.table(ai.getPositions());
-  // game loop
-  // while (!(player.gameboard.gameOver() || ai.gameboard.gameOver())) {
-  //   let move;
-
-  //   if (currentPlayer == player) {
-  //     move = prompt('Make your move');
-  //     //move = 1;
-  //     player.setVisited(move);
-  //     if (move === 'break') {
-  //       break;
-  //     }
-  //   } else {
-  //     move = ai.getMove();
-  //   }
-  //   currentOpponent.gameboard.recieveAttack(move);
-  //   [currentPlayer, currentOpponent] = [currentOpponent, currentPlayer];
-  // }
   const playRound = (playerMove) => {
     const result = [];
     result.push(ai.gameboard.recieveAttack(playerMove));
     const aiMove = ai.getMove();
     player.gameboard.recieveAttack(aiMove);
     result.push(aiMove);
-    if ((player.gameboard.gameOver() || ai.gameboard.gameOver())) {
-      result.push(true);
+    if (player.gameboard.gameOver()) {
+      result.push('You Lose!');
+    }
+    else if (ai.gameboard.gameOver()) {
+      result.push('You Win!');
     }
     return result;
   }

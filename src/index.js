@@ -6,6 +6,7 @@ Header();
 const { body, getPositions } = Main();
 Footer();
 let controller;
+let roundCount = 0;
 const submit = document.querySelector('#submitButton');
 submit.addEventListener('click', () => {
   if (getPositions().length === 5) {
@@ -21,15 +22,16 @@ submit.addEventListener('click', () => {
 const opponentBoard = document.querySelectorAll('#aiGrid>div');
 opponentBoard.forEach(tile => tile.addEventListener('click', attackHandler))
 function attackHandler (e) {
+    roundCount += 1;
     const result = controller.playRound(e.target.dataset.index);
     const announce = document.querySelector('.announce');
     if (result[0]) {
       e.target.classList.add('hit');
-      announce.textContent = 'Hit!';
+      announce.textContent = `Round ${roundCount}: Hit!`;
     }
     else {
       e.target.classList.add('miss');
-      announce.textContent = 'Miss!';
+      announce.textContent = `Round ${roundCount}: Miss!`;
     }
     const opponentTarget = document.querySelector(`#grid>div[data-index="${result[1]}"]`);
     if (opponentTarget.classList.contains('ship')) {
@@ -40,7 +42,7 @@ function attackHandler (e) {
       opponentTarget.classList.add('miss');
     }
     if (result[2]) {
-      announce.textContent = 'GAMEOVER';
+      announce.textContent = `GAME OVER: ${result[2]}`;
       opponentBoard.forEach(tile => tile.removeEventListener('click', attackHandler));
     }
     e.target.removeEventListener('click', attackHandler);
