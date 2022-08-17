@@ -35,10 +35,15 @@ const Main = () => {
   const submitBtn = document.createElement('button');
   submitBtn.textContent = 'Submit';
   submitBtn.id = 'submitButton';
+  // ai difficulty button
+  const diffBtn = document.createElement('button');
+  diffBtn.id = 'diffButton';
+  diffBtn.textContent = 'Easy';
   // player grid
   const grid = document.createElement('div');
   grid.id = 'grid';
   playerContainer.append(grid);
+  playerContainer.append(diffBtn);
   playerContainer.append(submitBtn);
   for (let i = 0; i < 100; i++){
     const tile = document.createElement('div');

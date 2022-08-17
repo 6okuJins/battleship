@@ -1,16 +1,27 @@
 import { Controller } from './classes';
-import { Main, Header, Footer } from './views';
+import { Main, Header, Footer, HeatMap } from './views';
 import { meyerReset } from './styles';
 
 Header();
 const { body, getPositions } = Main();
 Footer();
+// delete later;
+const footer = document.querySelector('.footer');
 let controller;
 let roundCount = 0;
 const submit = document.querySelector('#submitButton');
+const diff = document.querySelector('#diffButton');
+diff.addEventListener('click', () => {
+  diff.textContent = (diff.textContent === 'Easy') ? 'Hard' : 'Easy';
+})
 submit.addEventListener('click', () => {
   if (getPositions().length === 5) {
     controller = Controller(getPositions());
+    if (diff.textContent === 'Easy') {
+      controller.easyAI();
+    } else {
+      controller.hardAI();
+    }
     const allButtons = document.querySelectorAll('button');
     allButtons.forEach(button => button.classList.add('invisible'));
     const aiGrid = document.querySelector('#aiGrid');
@@ -46,4 +57,9 @@ function attackHandler (e) {
       opponentBoard.forEach(tile => tile.removeEventListener('click', attackHandler));
     }
     e.target.removeEventListener('click', attackHandler);
+    const currentHeatMap = document.querySelector('.HeatMap');
+    if (currentHeatMap) {
+      footer.removeChild(currentHeatMap);
+    }
+    footer.append(HeatMap(controller.getPDF()));
 }

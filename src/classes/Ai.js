@@ -58,14 +58,85 @@ function generatePositions () {
   }
   return result;
 }
+function generatePDF (visited) {
+  const ships = [5, 4, 3, 3, 2];
+  let permCount = 0;
+  // new array where each element is a square, and its value represents how many times it appears in a valid permutation
+  const heatMap = new Array(100).fill(0);
+
+  for (const ship of ships) {
+    for (let axis = 0; axis < 2; axis++) {
+      let i = 0;
+      while (i < 100 ) {
+        let valid = checkValid(axis, i, ship);
+        let j = 0;
+        // check to see if a ship can be placed at this location by checking each of its sub locations
+        while (valid && j < ship) {
+          if (visited[i + (axis === 0 ? j : j * 10)] === 'Miss') {
+            valid = false;
+          }
+          j += 1;
+        }
+        if (valid) {
+          permCount += 1;
+          // if position at i is valid, but not yet hit, increment 
+          if (!visited[i]) {
+            heatMap[i] += 1;
+          }
+          j = 1;
+          // increment the values at each sub location only if the ship placement is valid
+          while (j < ship) {
+            heatMap[i + (axis === 0 ? j : j * 10)] += 1;
+            j += 1;
+          }
+        }
+        i += 1;
+      }
+    }
+  }
+  return heatMap;
+}
 const Ai = () => {
-  const moves = shuffle(new Array(100).fill().map((_, index) => index));
+  let visited = new Array(100).fill();
+  let moves;
+  let mode;
+  const getPDF = () => {
+    console.log(generatePDF(visited));
+    return generatePDF(visited);
+  };
+  const setVisited = (position, status) => {
+    visited[position] = status;
+  }
+  const easyAI = () => {
+    moves = shuffle(new Array(100).fill().map((_, index) => index));
+    mode = 'easy';
+  }
+  const hardAI = () => {
+    mode = 'hard';
+  }
   const shipPositions = generatePositions();
   const getMoves = () => {
     return moves.slice();
   }
   const getMove = () => {
-    return moves.pop();
+    let result;
+    if (mode === 'easy') {
+      result = moves.pop();
+    } else {
+      let PDF = generatePDF(visited);
+      PDF = PDF.map((value, index) => {
+        if (visited[index] === 'Hit' || visited[index] === 'Miss') {
+          return 0;
+        } else {
+          return value;
+        }
+      })
+      const max = Math.max(...PDF);
+      console.log(visited);
+      result = PDF.indexOf(max);
+
+    }
+    return result;
   }
   const getPositions = () => {
     return shipPositions;
@@ -73,7 +144,11 @@ const Ai = () => {
   return {
     getMoves,
     getMove,
-    getPositions
+    getPositions,
+    setVisited,
+    getPDF,
+    easyAI,
+    hardAI
   }
 }
 export default Ai;

@@ -4,13 +4,13 @@ const Controller = (positions) => {
   // initialize DOM
   //initalize game
   const player = Player();
-  const ai = Ai();
+  let ai = Ai();
   player.gameboard = Gameboard();
   ai.gameboard = Gameboard();
   
-  let currentPlayer = player;
-  let currentOpponent = ai;
-
+  const easyAI = () => ai.easyAI();
+  const hardAI = () => ai.hardAI();
+  const getPDF = () => ai.getPDF();
   for (const position of positions) {
     player.gameboard.placeShip(Ship(position.length), position);
   }
@@ -19,12 +19,14 @@ const Controller = (positions) => {
     ai.gameboard.placeShip(Ship(position.length), position);
   }
 
-  console.table(ai.getPositions());
+  // console.table(ai.getPositions());
   const playRound = (playerMove) => {
     const result = [];
     result.push(ai.gameboard.recieveAttack(playerMove));
     const aiMove = ai.getMove();
-    player.gameboard.recieveAttack(aiMove);
+    const playerTileStatus = player.gameboard.recieveAttack(aiMove);
+    console.log(playerTileStatus);
+    ai.setVisited(aiMove, (playerTileStatus ? 'Hit' : 'Miss'));
     result.push(aiMove);
     if (player.gameboard.gameOver()) {
       result.push('You Lose!');
@@ -35,7 +37,10 @@ const Controller = (positions) => {
     return result;
   }
   return {
-    playRound
+    playRound,
+    easyAI,
+    hardAI,
+    getPDF
   }
 };
 

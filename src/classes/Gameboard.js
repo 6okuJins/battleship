@@ -22,8 +22,10 @@ const Gameboard = () => {
     const ship = board[coordinates];
     if (ship) {
       // not sure if I should use ship methods here since not importing ship module
+      console.log(ship.getHitPositions());
       if (!ship.getHitPositions().includes(coordinates)) {
         ship.hit(coordinates);
+        console.log('runs');
         if (ship.isSunk()) {
           sunkenShips ++;
         }
