@@ -61,5 +61,5 @@ function attackHandler (e) {
     if (currentHeatMap) {
       footer.removeChild(currentHeatMap);
     }
-    footer.append(HeatMap(controller.getPDF()));
+    //footer.append(HeatMap(controller.getPDF()));
 }

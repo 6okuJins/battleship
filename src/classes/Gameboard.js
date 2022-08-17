@@ -1,6 +1,6 @@
 const Gameboard = () => {
   const board = {};
-  let sunkenShips = 0;
+  let sunkenShips = [];
   const getBoard = () => {
     return board;
   }
@@ -19,26 +19,30 @@ const Gameboard = () => {
     }
   }
   const recieveAttack = (coordinates) => {
+    const result = [];
     const ship = board[coordinates];
     if (ship) {
       // not sure if I should use ship methods here since not importing ship module
-      console.log(ship.getHitPositions());
       if (!ship.getHitPositions().includes(coordinates)) {
         ship.hit(coordinates);
-        console.log('runs');
+        result.push(true);
         if (ship.isSunk()) {
-          sunkenShips ++;
+          sunkenShips.push(ship);
+          result.push(true);
+        } else {
+          result.push(false);
         }
-        return true;
+        
       }
     }
     else {
       board[coordinates] = null;
-      return false;
+      result.push(false, false)
     }
+    return result
   }
   const gameOver = () => {
-    return (sunkenShips === 5);
+    return (sunkenShips.length === 5);
   }
 
   return {

@@ -58,8 +58,12 @@ function generatePositions () {
   }
   return result;
 }
-function generatePDF (visited) {
+function generatePDF (visited, sunkenShips) {
   const ships = [5, 4, 3, 3, 2];
+  sunkenShips.forEach((sunkenShip) => {
+    ships.splice(ships.indexOf(sunkenShip.getShipLength()), 1);
+  });
+  console.log(ships);
   let permCount = 0;
   // new array where each element is a square, and its value represents how many times it appears in a valid permutation
   const heatMap = new Array(100).fill(0);
@@ -100,8 +104,11 @@ const Ai = () => {
   let visited = new Array(100).fill();
   let moves;
   let mode;
+
+  const setShipsSunken = () => {
+
+  }
   const getPDF = () => {
-    console.log(generatePDF(visited));
     return generatePDF(visited);
   };
   const setVisited = (position, status) => {
@@ -118,12 +125,13 @@ const Ai = () => {
   const getMoves = () => {
     return moves.slice();
   }
-  const getMove = () => {
+  const getMove = (sunkenShips) => {
+    console.log(sunkenShips);
     let result;
     if (mode === 'easy') {
       result = moves.pop();
     } else {
-      let PDF = generatePDF(visited);
+      let PDF = generatePDF(visited, sunkenShips);
       PDF = PDF.map((value, index) => {
         if (visited[index] === 'Hit' || visited[index] === 'Miss') {
           return 0;
@@ -132,7 +140,6 @@ const Ai = () => {
         }
       })
       const max = Math.max(...PDF);
-      console.log(visited);
       result = PDF.indexOf(max);
 
     }
@@ -146,6 +153,7 @@ const Ai = () => {
     getMove,
     getPositions,
     setVisited,
+    setShipsSunken,
     getPDF,
     easyAI,
     hardAI

@@ -22,10 +22,10 @@ const Controller = (positions) => {
   // console.table(ai.getPositions());
   const playRound = (playerMove) => {
     const result = [];
-    result.push(ai.gameboard.recieveAttack(playerMove));
-    const aiMove = ai.getMove();
-    const playerTileStatus = player.gameboard.recieveAttack(aiMove);
-    console.log(playerTileStatus);
+    const [aiTileStatus, aiSunkStatus] = [...(ai.gameboard.recieveAttack(playerMove))];
+    result.push(aiTileStatus);
+    const aiMove = ai.getMove(player.gameboard.getSunkenShips());
+    const [playerTileStatus, playerSunkStatus] = [...player.gameboard.recieveAttack(aiMove)];
     ai.setVisited(aiMove, (playerTileStatus ? 'Hit' : 'Miss'));
     result.push(aiMove);
     if (player.gameboard.gameOver()) {
