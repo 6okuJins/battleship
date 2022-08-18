@@ -6,16 +6,18 @@ body {
 }
 .main {
   .announce {
+    grid-column: 1 / 3;
+    grid-row: 1 / 2;
+    height: 100%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: end;
     align-items: center;
-    position: absolute;
-    top: 10vh;
-    padding-bottom: 50px;
     font-size: 50px;
     font-family: 'Oswald', sans-serif;
   }
-  display: flex;
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
   justify-content: center;
   align-items: center;
   height: 100%;
@@ -28,9 +30,12 @@ body {
     background-color: red;
   }
   .playerContainer {
+    grid-row: 2/ 3;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
+    justify-items: flex-start;
     align-items: center;
     gap: 20px;
     button {
@@ -69,6 +74,13 @@ body {
     }
   }
   .opponentContainer {
+    grid-row: 2 / 3;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    justify-items: flex-start;
+    align-items: center;
     #aiGrid {
       display: grid;
       grid-template-columns: repeat(10, 50px);
