@@ -63,7 +63,6 @@ function generatePDF (visited, sunkenShips) {
   sunkenShips.forEach((sunkenShip) => {
     ships.splice(ships.indexOf(sunkenShip.getShipLength()), 1);
   });
-  console.log(ships);
   let permCount = 0;
   // new array where each element is a square, and its value represents how many times it appears in a valid permutation
   const heatMap = new Array(100).fill(0);
@@ -104,9 +103,11 @@ const Ai = () => {
   let visited = new Array(100).fill();
   let moves;
   let mode;
-
-  const setShipsSunken = () => {
-
+  const targetting = [];
+  const setTarget = (newTarget) => {
+    if (targetting.every(element => element !== newTarget)){
+      targetting.push(newTarget);
+    }
   }
   const getPDF = () => {
     return generatePDF(visited);
@@ -126,7 +127,6 @@ const Ai = () => {
     return moves.slice();
   }
   const getMove = (sunkenShips) => {
-    console.log(sunkenShips);
     let result;
     if (mode === 'easy') {
       result = moves.pop();
@@ -153,7 +153,7 @@ const Ai = () => {
     getMove,
     getPositions,
     setVisited,
-    setShipsSunken,
+    setTarget,
     getPDF,
     easyAI,
     hardAI

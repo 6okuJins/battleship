@@ -7,7 +7,6 @@ const Controller = (positions) => {
   let ai = Ai();
   player.gameboard = Gameboard();
   ai.gameboard = Gameboard();
-  
   const easyAI = () => ai.easyAI();
   const hardAI = () => ai.hardAI();
   const getPDF = () => ai.getPDF();
@@ -27,6 +26,9 @@ const Controller = (positions) => {
     const aiMove = ai.getMove(player.gameboard.getSunkenShips());
     const [playerTileStatus, playerSunkStatus] = [...player.gameboard.recieveAttack(aiMove)];
     ai.setVisited(aiMove, (playerTileStatus ? 'Hit' : 'Miss'));
+    if (playerTileStatus) {
+      ai.setTarget(player.gameboard.getBoard()[aiMove])
+    }
     result.push(aiMove);
     if (player.gameboard.gameOver()) {
       result.push('You Lose!');
