@@ -27,7 +27,13 @@ const Controller = (positions) => {
     const [playerTileStatus, playerSunkStatus] = [...player.gameboard.recieveAttack(aiMove)];
     ai.setVisited(aiMove, (playerTileStatus ? 'Hit' : 'Miss'));
     if (playerTileStatus) {
-      ai.setTarget(player.gameboard.getBoard()[aiMove])
+      ai.setTarget(aiMove);
+    }
+    if (!playerTileStatus) {
+      ai.shiftTargetStack();
+    }
+    if (playerSunkStatus) {
+      ai.removeTarget(aiMove);
     }
     result.push(aiMove);
     if (player.gameboard.gameOver()) {

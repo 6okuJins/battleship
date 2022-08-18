@@ -58,8 +58,9 @@ function generatePositions () {
   }
   return result;
 }
-function generatePDF (visited, sunkenShips) {
+function generatePDF (visited, sunkenShips, target, targetDirection, shiftTargetStack) {
   const ships = [5, 4, 3, 3, 2];
+  console.log(target);
   sunkenShips.forEach((sunkenShip) => {
     ships.splice(ships.indexOf(sunkenShip.getShipLength()), 1);
   });
@@ -97,17 +98,72 @@ function generatePDF (visited, sunkenShips) {
       }
     }
   }
+  if (target) {
+    let adjacent;
+    if (targetDirection === 'left') {
+      adjacent = target - 1;
+      while (adjacent % 10 > 0 && visited[adjacent] === 'Hit') {
+        adjacent -= 1;
+      }
+      if (visited[adjacent]) {
+        shiftTargetStack();
+        targetDirection = 'right';
+      }
+    }
+    if (targetDirection === 'right') {
+      adjacent = target + 1;
+      while (adjacent % 10 < 9 && visited[adjacent] === 'Hit') {
+        adjacent += 1
+      }
+      if (visited[adjacent]) {
+        shiftTargetStack();
+        targetDirection = 'up';
+      }
+    }
+    if (targetDirection === 'up') {
+      adjacent = target + 10;
+      while (Math.floor(adjacent / 10) % 10 && visited[adjacent] === 'Hit') {
+        adjacent += 10
+      }
+      if (visited[adjacent]) {
+        shiftTargetStack();
+        targetDirection = 'down';
+      }
+    }
+    if (targetDirection === 'down') {
+      adjacent = target - 10;
+      while (Math.floor(adjacent / 10) % 10 && visited[adjacent] === 'Hit') {
+        adjacent -= 10
+      }
+    }
+    if (!visited[adjacent]) {
+      heatMap[adjacent] += 100
+    } else {
+      shiftTargetStack();
+    }
+  }
   return heatMap;
 }
 const Ai = () => {
   let visited = new Array(100).fill();
   let moves;
   let mode;
-  const targetting = [];
+  let target;
+  let targetStack = ['left', 'right', 'up', 'down'];
   const setTarget = (newTarget) => {
-    if (targetting.every(element => element !== newTarget)){
-      targetting.push(newTarget);
+    if (!target) {
+      target = newTarget;
+      targetStack = ["left", "right", "up", "down"];
     }
+  }
+  const shiftTargetStack = () => {
+    if (targetStack) {
+      targetStack.shift();
+    }
+  }
+  const removeTarget = (deTarget) => {
+    target = undefined;
+    targetStack = [];
   }
   const getPDF = () => {
     return generatePDF(visited);
@@ -131,7 +187,7 @@ const Ai = () => {
     if (mode === 'easy') {
       result = moves.pop();
     } else {
-      let PDF = generatePDF(visited, sunkenShips);
+      let PDF = generatePDF(visited, sunkenShips, target, targetStack[0], shiftTargetStack);
       PDF = PDF.map((value, index) => {
         if (visited[index] === 'Hit' || visited[index] === 'Miss') {
           return 0;
@@ -154,6 +210,8 @@ const Ai = () => {
     getPositions,
     setVisited,
     setTarget,
+    shiftTargetStack,
+    removeTarget,
     getPDF,
     easyAI,
     hardAI
